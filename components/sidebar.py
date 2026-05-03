@@ -10,10 +10,10 @@ def get_base64_image(image_path):
 def render_sidebar(datasets):
     """
     datasets = {
-        "Newlay CSO": df1,
-        "Eureca": df2,
-        "Musa": df3,
-        "Juli": df4
+        "Tally Ho": df1,
+        "Ferry PS": df2,
+        "ROssall Outfall": df3,
+        "Flass Lane": df4
     }
     """
 
