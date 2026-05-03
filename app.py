@@ -13,7 +13,7 @@ from components.age_outstanding import render_age_outstanding
 # PAGE CONFIG
 # =========================
 st.set_page_config(
-    page_title="Tally Ho TQ & RFI Tracker",
+    page_title="Asset TQ & RFI Tracker",
     layout="wide"
 )
 
