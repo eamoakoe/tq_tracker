@@ -97,7 +97,7 @@ def render_header():
     with col1:
         st.markdown("""
         <div class="header-box left-box">
-            <div class="title">Tally Ho TQ & RFI Tracker</div>
+            <div class="title">Asset TQ & RFI Tracker</div>
             <div class="subtitle">TQs • RFIs • Outstanding Responses</div>
         </div>
         """, unsafe_allow_html=True)
