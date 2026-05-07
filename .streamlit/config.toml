@@ -1,7 +1,7 @@
 [theme]
-base="dark"
-primaryColor="#00BFFF"
-backgroundColor="#0B1120"
-secondaryBackgroundColor="#111827"
-textColor="#FFFFFF"
-font="sans serif"
+base = "light"
+primaryColor = "#000000"            # removes purple/blue accents
+backgroundColor = "#FFFFFF"         # main background
+secondaryBackgroundColor = "#F5F5F5" # sidebar / containers
+textColor = "#000000"
+font = "sans serif"
