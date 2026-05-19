@@ -1,3 +1,5 @@
+import streamlit as st
+
 st.markdown('<div class="section-title">PROJECT</div>', unsafe_allow_html=True)
 
 project_list = [
