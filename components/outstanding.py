@@ -44,9 +44,11 @@ def render_outstanding_line(df, total=None):
 
         open_items = sub[sub[status_col] == "OPEN"]
         closed_items = sub[sub[status_col] == "CLOSED"]
+        responded_items = sub[sub[status_col] == "RESPONDED"]
 
         open_count = len(open_items)
         closed_count = len(closed_items)
+        responded_count = len(responded_items)
 
         outstanding_count = len(
             open_items[
@@ -55,36 +57,39 @@ def render_outstanding_line(df, total=None):
             ]
         )
 
-        return open_count, outstanding_count, closed_count
+        return open_count, outstanding_count, closed_count, responded_count
 
-    rfi_open, rfi_out, rfi_closed = calc(rfi)
-    tq_open, tq_out, tq_closed = calc(tq)
+    # Apply logic
+    rfi_open, rfi_out, rfi_closed, rfi_responded = calc(rfi)
+    tq_open, tq_out, tq_closed, tq_responded = calc(tq)
 
     # =========================
     # COLORS
     # =========================
     COLORS = {
-        "open": "#ef4444",      # red
-        "out": "#f59e0b",       # gold
-        "closed": "#22c55e"    # green
+        "open": "#ef4444",       # red
+        "out": "#f59e0b",        # gold
+        "closed": "#22c55e",     # green
+        "responded": "#3b82f6"   # blue
     }
 
     # =========================
     # PIE CHART
     # =========================
-    def pie(open_count, outstanding, closed):
+    def pie(open_count, outstanding, closed, responded):
 
         fig = go.Figure()
 
         fig.add_trace(go.Pie(
-            labels=["Open", "Outstanding (>7d)", "Closed"],
-            values=[open_count, outstanding, closed],
+            labels=["Open", "Outstanding (>7d)", "Closed", "Responded"],
+            values=[open_count, outstanding, closed, responded],
             textinfo="label+value",
             marker=dict(
                 colors=[
                     COLORS["open"],
                     COLORS["out"],
-                    COLORS["closed"]
+                    COLORS["closed"],
+                    COLORS["responded"]
                 ],
                 line=dict(color="white", width=2)
             ),
@@ -92,7 +97,7 @@ def render_outstanding_line(df, total=None):
         ))
 
         fig.update_layout(
-            height=420,   # 🔥 increased size
+            height=420,
             margin=dict(l=10, r=10, t=10, b=10),
             showlegend=False,
             paper_bgcolor="#0f172a",
@@ -105,7 +110,7 @@ def render_outstanding_line(df, total=None):
     # =========================
     # CARD
     # =========================
-    def card(title, open_count, outstanding, closed):
+    def card(title, open_count, outstanding, closed, responded):
 
         st.markdown(f"### {title} Overview")
 
@@ -113,11 +118,12 @@ def render_outstanding_line(df, total=None):
             f"""
             🔴 **Open:** {open_count}  
             🟡 **Outstanding (>7d):** {outstanding}  
-            🟢 **Closed:** {closed}
+            🟢 **Closed:** {closed}  
+            🔵 **Responded:** {responded}
             """
         )
 
-        # NOTE (IMPORTANT CLARITY)
+        # ✅ FINAL NOTE (your refined version)
         st.markdown("""
         <div style="
             font-size:12px;
@@ -125,12 +131,14 @@ def render_outstanding_line(df, total=None):
             margin-top:6px;
             line-height:1.4;
         ">
-        <b>Note:</b> Outstanding items are OPEN items older than 7 days.
+        <b>Note:</b><br>
+        • Outstanding items are OPEN items older than 7 days.<br>
+        • Responded items have received a response but still require additional information from a third party before they can be closed.
         </div>
         """, unsafe_allow_html=True)
 
         st.plotly_chart(
-            pie(open_count, outstanding, closed),
+            pie(open_count, outstanding, closed, responded),
             use_container_width=True
         )
 
@@ -142,7 +150,7 @@ def render_outstanding_line(df, total=None):
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
-        card("RFI", rfi_open, rfi_out, rfi_closed)
+        card("RFI", rfi_open, rfi_out, rfi_closed, rfi_responded)
 
     with col2:
-        card("TQ", tq_open, tq_out, tq_closed)
+        card("TQ", tq_open, tq_out, tq_closed, tq_responded)
