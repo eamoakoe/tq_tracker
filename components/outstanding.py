@@ -10,7 +10,7 @@ def render_outstanding_line(df, total=None):
         return
 
     # =========================
-    # CLEAN DATA
+    # CLEAN DATA (FIXED ✅)
     # =========================
     df = df.copy()
     df.columns = df.columns.str.strip().str.lower()
@@ -22,6 +22,7 @@ def render_outstanding_line(df, total=None):
     df[status_col] = (
         df[status_col]
         .astype(str)
+        .str.replace(u"\xa0", " ", regex=False)  # remove hidden spaces
         .str.strip()
         .str.upper()
     )
@@ -38,13 +39,17 @@ def render_outstanding_line(df, total=None):
     tq = df[df[doc_col] == "TQ"]
 
     # =========================
-    # LOGIC
+    # LOGIC (FIXED ✅)
     # =========================
     def calc(sub):
 
         open_items = sub[sub[status_col] == "OPEN"]
         closed_items = sub[sub[status_col] == "CLOSED"]
-        responded_items = sub[sub[status_col] == "RESPONDED"]
+
+        # ✅ robust Responded detection
+        responded_items = sub[
+            sub[status_col].str.contains("RESPOND", na=False)
+        ]
 
         open_count = len(open_items)
         closed_count = len(closed_items)
@@ -87,7 +92,7 @@ def render_outstanding_line(df, total=None):
             COLORS["responded"]
         ]
 
-        # ✅ Remove zero values
+        # ✅ remove zero slices
         filtered = [
             (l, v, c)
             for l, v, c in zip(labels, values, colors)
@@ -170,3 +175,9 @@ def render_outstanding_line(df, total=None):
 
     with col2:
         card("TQ", tq_open, tq_out, tq_closed, tq_responded)
+
+    # =========================
+    # DEBUG (OPTIONAL ✅)
+    # =========================
+    # Uncomment to inspect real values if needed
+    # st.write("Unique Status Values:", df[status_col].unique())
