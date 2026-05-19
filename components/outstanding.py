@@ -67,30 +67,46 @@ def render_outstanding_line(df, total=None):
     # COLORS
     # =========================
     COLORS = {
-        "open": "#ef4444",       # red
-        "out": "#f59e0b",        # gold
-        "closed": "#22c55e",     # green
-        "responded": "#3b82f6"   # blue
+        "open": "#ef4444",
+        "out": "#f59e0b",
+        "closed": "#22c55e",
+        "responded": "#3b82f6"
     }
 
     # =========================
-    # PIE CHART
+    # PIE CHART (NO ZEROS ✅)
     # =========================
     def pie(open_count, outstanding, closed, responded):
+
+        labels = ["Open", "Outstanding (>7d)", "Closed", "Responded"]
+        values = [open_count, outstanding, closed, responded]
+        colors = [
+            COLORS["open"],
+            COLORS["out"],
+            COLORS["closed"],
+            COLORS["responded"]
+        ]
+
+        # ✅ Remove zero values
+        filtered = [
+            (l, v, c)
+            for l, v, c in zip(labels, values, colors)
+            if v > 0
+        ]
+
+        if not filtered:
+            return go.Figure()
+
+        labels_f, values_f, colors_f = zip(*filtered)
 
         fig = go.Figure()
 
         fig.add_trace(go.Pie(
-            labels=["Open", "Outstanding (>7d)", "Closed", "Responded"],
-            values=[open_count, outstanding, closed, responded],
+            labels=list(labels_f),
+            values=list(values_f),
             textinfo="label+value",
             marker=dict(
-                colors=[
-                    COLORS["open"],
-                    COLORS["out"],
-                    COLORS["closed"],
-                    COLORS["responded"]
-                ],
+                colors=list(colors_f),
                 line=dict(color="white", width=2)
             ),
             sort=False
@@ -123,7 +139,7 @@ def render_outstanding_line(df, total=None):
             """
         )
 
-        # ✅ FINAL NOTE (your refined version)
+        # ✅ FINAL NOTE
         st.markdown("""
         <div style="
             font-size:12px;
