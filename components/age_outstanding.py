@@ -11,13 +11,44 @@ def render_age_outstanding(df):
     df = df.copy()
 
     # =========================
-    # CLEAN DATA
+    # CLEAN DATA (MATCH OTHER FILE ✅)
     # =========================
-    df["date sent"] = pd.to_datetime(df["date sent"], errors="coerce")
-    df["reply date"] = pd.to_datetime(df["reply date"], errors="coerce")
+    df.columns = df.columns.str.strip().str.lower()
 
-    df["age"] = (pd.Timestamp.today().normalize() - df["date sent"]).dt.days
-    df["age"] = df["age"].fillna(0)
+    # Clean status
+    df["status"] = (
+        df["status"]
+        .astype(str)
+        .str.replace(u"\xa0", " ", regex=False)
+        .str.strip()
+        .str.upper()
+    )
+
+    # Parse dates
+    df["date sent"] = pd.to_datetime(df["date sent"], errors="coerce")
+
+    # Drop bad rows
+    df = df.dropna(subset=["date sent"])
+
+    today = pd.Timestamp.today().normalize()
+
+    # =========================
+    # ✅ APPLY SAME OUTSTANDING LOGIC
+    # =========================
+    df = df[
+        (df["status"] == "OPEN") &
+        ((today - df["date sent"]).dt.days > 7)
+    ]
+
+    # If nothing left after filtering
+    if df.empty:
+        st.warning("No outstanding items (>7 days)")
+        return
+
+    # =========================
+    # AGE CALCULATION
+    # =========================
+    df["age"] = (today - df["date sent"]).dt.days
 
     # =========================
     # AGE BANDS
@@ -25,12 +56,17 @@ def render_age_outstanding(df):
     bins = [-1, 2, 7, 14, 30, 10_000]
     labels = ["0–2 days", "3–7 days", "8–14 days", "15–30 days", ">30 days"]
 
-    df["band"] = pd.cut(df["age"], bins=bins, labels=labels)
+    df["band"] = pd.cut(
+        df["age"],
+        bins=bins,
+        labels=labels,
+        include_lowest=True
+    )
 
     summary = df["band"].value_counts().reindex(labels, fill_value=0)
     total = len(df)
 
-    pct = (summary / total * 100).round(1) if total else 0
+    pct = (summary / total * 100).round(1)
 
     # =========================
     # COLOURS
@@ -84,7 +120,7 @@ def render_age_outstanding(df):
     ))
 
     fig.update_layout(
-        height=320,  # 🔥 FIXED: MATCH TREND.PY HEIGHT
+        height=320,
         margin=dict(l=25, r=25, t=10, b=10),
         paper_bgcolor="#0f172a",
         plot_bgcolor="#0f172a",
