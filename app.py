@@ -17,19 +17,6 @@ st.set_page_config(
     layout="wide"
 )
 
-
-# =========================
-# DESIGN DECISION FILE MAP (ONLY ADDITION)
-# =========================
-DDR_FILES = {
-    "Tally Ho": "ddr/Design_Decision_Register_TallyHo.xlsx",
-    "Ferry PS": "ddr/Design_Decision_Register_Ferry.xlsx",
-    "Rossall Outfall": "ddr/Design_Decision_Register_Rossall.xlsx",
-    "Flass Lane": "ddr/Design_Decision_Register_Flass.xlsx",
-    "ASP4": "ddr/Design_Decision_Register_ASP4.xlsx",
-}
-
-
 # =========================
 # SAFE LOAD FUNCTION
 # =========================
