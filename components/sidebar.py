@@ -52,10 +52,7 @@ def render_sidebar(datasets, DDR_FILES):
         # -------------------------
         st.markdown('<div class="section-title">ASSET</div>', unsafe_allow_html=True)
 
-        asset = st.radio(
-            "",
-            list(datasets.keys())
-        )
+        asset = st.radio("", list(datasets.keys()))
 
         df = datasets[asset].copy()
         df.columns = df.columns.str.strip().str.lower()
@@ -94,15 +91,29 @@ def render_sidebar(datasets, DDR_FILES):
             st.warning("No records found")
             return asset, filtered_df, None
 
-        seq_choice = st.selectbox(
-            "Select Seq No",
-            seq_list
-        )
+        seq_choice = st.selectbox("Select Seq No", seq_list)
 
         # -------------------------
-        # 🔽 DESIGN DECISION REGISTER (NEW SECTION)
+        # 🔽 DESIGN DECISION REGISTER (CARD STYLE)
         # -------------------------
-        st.markdown('<div class="section-title">DESIGN DECISION REGISTER</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="
+            background-color:#111c2e;
+            padding:12px;
+            border-radius:10px;
+            border:1px solid #2a3f5f;
+            margin-top:20px;
+        ">
+            <div style="
+                color:#8fbfff;
+                font-size:12px;
+                margin-bottom:8px;
+                font-weight:600;
+            ">
+                📘 DESIGN DECISION REGISTER
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
         ddr_assets = ["Ferry", "Flass", "Rossall", "ASP4", "TallyHo"]
 
