@@ -7,12 +7,12 @@ def get_base64_image(image_path):
         return base64.b64encode(img_file.read()).decode()
 
 
-def render_sidebar(datasets, DDR_FILES):
+def render_sidebar(datasets):
 
     logo_base64 = get_base64_image("assets/logo.png")
 
     # =========================
-    # BASIC STYLE
+    # STYLE
     # =========================
     st.markdown("""
     <style>

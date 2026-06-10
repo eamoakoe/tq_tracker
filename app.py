@@ -17,6 +17,7 @@ st.set_page_config(
     layout="wide"
 )
 
+
 # =========================
 # SAFE LOAD FUNCTION
 # =========================
@@ -43,9 +44,9 @@ datasets = load_data()
 
 
 # =========================
-# SIDEBAR (ONLY CHANGE HERE)
+# SIDEBAR ✅ CLEAN
 # =========================
-asset, df, seq, ddr_selected = render_sidebar(datasets, DDR_FILES)
+asset, df, seq = render_sidebar(datasets)
 
 render_header()
 
