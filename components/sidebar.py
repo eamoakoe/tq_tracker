@@ -8,14 +8,6 @@ def get_base64_image(image_path):
 
 
 def render_sidebar(datasets, DDR_FILES):
-    """
-    datasets = {
-        "Flass Lane": df1,
-        "Ferry PS": df2,
-        "Rossall": df3,
-        "Tally Ho": df4
-    }
-    """
 
     logo_base64 = get_base64_image("assets/logo.png")
 
@@ -48,11 +40,32 @@ def render_sidebar(datasets, DDR_FILES):
         """, unsafe_allow_html=True)
 
         # -------------------------
-        # 🔽 ASSET SELECTOR
+        # 🟡 ASSET (GOLD CARD)
         # -------------------------
-        st.markdown('<div class="section-title">ASSET</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="
+            background-color:#2a2110;
+            padding:12px;
+            border-radius:10px;
+            border:1px solid #c9a227;
+            margin-bottom:10px;
+        ">
+            <div style="
+                color:#ffd700;
+                font-size:12px;
+                font-weight:600;
+                margin-bottom:8px;
+            ">
+                🟡 ASSET
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-        asset = st.radio("", list(datasets.keys()))
+        asset = st.radio(
+            "",
+            list(datasets.keys()),
+            key="asset_selector"
+        )
 
         df = datasets[asset].copy()
         df.columns = df.columns.str.strip().str.lower()
@@ -81,7 +94,7 @@ def render_sidebar(datasets, DDR_FILES):
             filtered_df = filtered_df[filtered_df["status"] == status]
 
         # -------------------------
-        # 🔽 SEQUENCE SELECTOR
+        # 🔽 SEQUENCE
         # -------------------------
         st.markdown('<div class="section-title">SEQUENCE</div>', unsafe_allow_html=True)
 
@@ -94,23 +107,23 @@ def render_sidebar(datasets, DDR_FILES):
         seq_choice = st.selectbox("Select Seq No", seq_list)
 
         # -------------------------
-        # 🔽 DESIGN DECISION REGISTER (CARD STYLE)
+        # 🔴 DESIGN DECISION REGISTER (RED CARD)
         # -------------------------
         st.markdown("""
         <div style="
-            background-color:#111c2e;
+            background-color:#2a1115;
             padding:12px;
             border-radius:10px;
-            border:1px solid #2a3f5f;
+            border:1px solid #ff4d4d;
             margin-top:20px;
         ">
             <div style="
-                color:#8fbfff;
+                color:#ff6b6b;
                 font-size:12px;
-                margin-bottom:8px;
                 font-weight:600;
+                margin-bottom:8px;
             ">
-                📘 DESIGN DECISION REGISTER
+                🔴 DESIGN DECISION REGISTER
             </div>
         </div>
         """, unsafe_allow_html=True)
