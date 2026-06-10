@@ -19,6 +19,18 @@ st.set_page_config(
 
 
 # =========================
+# DESIGN DECISION FILE MAP (ONLY ADDITION)
+# =========================
+DDR_FILES = {
+    "Tally Ho": "ddr/Design_Decision_Register_TallyHo.xlsx",
+    "Ferry PS": "ddr/Design_Decision_Register_Ferry.xlsx",
+    "Rossall Outfall": "ddr/Design_Decision_Register_Rossall.xlsx",
+    "Flass Lane": "ddr/Design_Decision_Register_Flass.xlsx",
+    "ASP4": "ddr/Design_Decision_Register_ASP4.xlsx",
+}
+
+
+# =========================
 # SAFE LOAD FUNCTION
 # =========================
 def safe_load(path):
@@ -28,7 +40,7 @@ def safe_load(path):
 
 
 # =========================
-# LOAD DATASETS (SAFE)
+# LOAD DATASETS
 # =========================
 @st.cache_data
 def load_data():
@@ -44,9 +56,9 @@ datasets = load_data()
 
 
 # =========================
-# SIDEBAR
+# SIDEBAR (ONLY CHANGE HERE)
 # =========================
-asset, df, seq = render_sidebar(datasets)
+asset, df, seq = render_sidebar(datasets, DDR_FILES)
 
 render_header()
 
@@ -54,7 +66,6 @@ render_header()
 # =========================
 # HANDLE MISSING DATA
 # =========================
-
 if df is None or df.empty:
     st.warning(f"No data available for {asset}")
     st.stop()
@@ -87,7 +98,7 @@ with col2:
 
 
 # =========================
-# ROW DETAILS (SEQ SELECT)
+# ROW DETAILS
 # =========================
 if seq is not None:
 
