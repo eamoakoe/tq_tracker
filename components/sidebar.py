@@ -99,4 +99,17 @@ def render_sidebar(datasets, DDR_FILES):
             seq_list
         )
 
+        # -------------------------
+        # 🔽 DESIGN DECISION REGISTER (NEW SECTION)
+        # -------------------------
+        st.markdown('<div class="section-title">DESIGN DECISION REGISTER</div>', unsafe_allow_html=True)
+
+        ddr_assets = ["Ferry", "Flass", "Rossall", "ASP4", "TallyHo"]
+
+        selected_ddr = st.radio(
+            "",
+            ddr_assets,
+            key="ddr_selector"
+        )
+
         return asset, filtered_df, seq_choice
