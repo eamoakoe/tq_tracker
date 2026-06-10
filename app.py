@@ -58,7 +58,7 @@ datasets = load_data()
 # =========================
 # SIDEBAR (ONLY CHANGE HERE)
 # =========================
-asset, df, seq = render_sidebar(datasets, DDR_FILES)
+asset, df, seq, ddr_selected = render_sidebar(datasets, DDR_FILES)
 
 render_header()
 
