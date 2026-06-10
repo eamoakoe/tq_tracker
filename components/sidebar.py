@@ -7,13 +7,13 @@ def get_base64_image(image_path):
         return base64.b64encode(img_file.read()).decode()
 
 
-def render_sidebar(datasets):
+def render_sidebar(datasets, DDR_FILE):
     """
     datasets = {
-        "Newlay CSO": df1,
-        "Eureca": df2,
-        "Musa": df3,
-        "Juli": df4
+        "Flass Lane": df1,
+        "Ferry PS": df2,
+        "Rossall": df3,
+        "Tally Ho": df4
     }
     """
 
