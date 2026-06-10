@@ -12,22 +12,13 @@ def render_sidebar(datasets, DDR_FILES):
     logo_base64 = get_base64_image("assets/logo.png")
 
     # =========================
-    # STYLE
+    # BASIC STYLE
     # =========================
     st.markdown("""
     <style>
         [data-testid="stSidebarNav"] {display:none;}
-        [data-testid="stSidebarNavItems"] {display:none;}
-
         section[data-testid="stSidebar"] {
             background: linear-gradient(180deg, #08111f 0%, #0b1a2f 100%);
-        }
-
-        .section-title {
-            color:#b8b8d1;
-            font-size:12px;
-            margin-top:15px;
-            margin-bottom:5px;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -38,34 +29,21 @@ def render_sidebar(datasets, DDR_FILES):
         # LOGO
         # =========================
         st.markdown(f"""
-        <div style="text-align:center; padding:10px 0 20px 0;">
-            data:image/png;base64,{logo_base64}
+        <div style="text-align:center; padding:10px;">
+            <img src="data:image/png;base64,{logo_base64}" width="80">
         </div>
         """, unsafe_allow_html=True)
 
         # =========================
-        # 🟢 ASSET (GREEN CARD)
+        # 🟢 ASSET
         # =========================
-        st.markdown("""
-        <div style="
-            background-color:#0f2a1f;
-            padding:12px;
-            border-radius:10px;
-            border:1px solid #2ecc71;
-            margin-bottom:10px;
-        ">
-            <div style="
-                color:#58d68d;
-                font-size:12px;
-                font-weight:600;
-                margin-bottom:8px;
-            ">
-                🟢 ASSET
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("### 🟢 ASSET")
 
-        asset = st.radio("", list(datasets.keys()), key="asset_selector")
+        asset = st.radio(
+            "",
+            list(datasets.keys()),
+            key="asset_selector"
+        )
 
         df = datasets[asset].copy()
         df.columns = df.columns.str.strip().str.lower()
@@ -73,7 +51,7 @@ def render_sidebar(datasets, DDR_FILES):
         # =========================
         # FILTERS
         # =========================
-        st.markdown('<div class="section-title">FILTERS</div>', unsafe_allow_html=True)
+        st.markdown("### FILTERS")
 
         doc_type = st.selectbox(
             "Doc Type",
@@ -96,7 +74,7 @@ def render_sidebar(datasets, DDR_FILES):
         # =========================
         # SEQUENCE
         # =========================
-        st.markdown('<div class="section-title">SEQUENCE</div>', unsafe_allow_html=True)
+        st.markdown("### SEQUENCE")
 
         seq_list = sorted(filtered_df["seq no"].dropna().unique().tolist())
 
@@ -107,33 +85,13 @@ def render_sidebar(datasets, DDR_FILES):
         seq_choice = st.selectbox("Select Seq No", seq_list)
 
         # =========================
-        # 🔵 DESIGN DECISION REGISTER (BLUE CARD)
+        # 🔵 DESIGN DECISION REGISTER
         # =========================
-        st.markdown("""
-        <div style="
-            background-color:#0e1f3a;
-            padding:12px;
-            border-radius:10px;
-            border:1px solid #3498db;
-            margin-top:20px;
-        ">
-            <div style="
-                color:#5dade2;
-                font-size:12px;
-                font-weight:600;
-                margin-bottom:6px;
-            ">
-                🔵 DESIGN DECISION REGISTER
-            </div>
-            <div style="
-                color:#aab6cf;
-                font-size:11px;
-                margin-bottom:6px;
-            ">
-                Select:
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("---")
+        st.markdown("### 🔵 DESIGN DECISION REGISTER")
+
+        # ✅ THIS IS THE IMPORTANT PART (VISIBLE)
+        st.write("Select:")
 
         ddr_assets = ["Ferry", "Flass", "Rossall", "ASP4", "TallyHo"]
 
@@ -143,9 +101,9 @@ def render_sidebar(datasets, DDR_FILES):
             key="ddr_selector"
         )
 
-        # ✅ Prevent auto-trigger on first load
-        if "ddr_initialized" not in st.session_state:
-            st.session_state.ddr_initialized = True
+        # ✅ prevent auto open on first load
+        if "ddr_init" not in st.session_state:
+            st.session_state.ddr_init = True
             selected_ddr = None
 
         # =========================
