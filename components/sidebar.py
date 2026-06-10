@@ -11,7 +11,9 @@ def render_sidebar(datasets, DDR_FILES):
 
     logo_base64 = get_base64_image("assets/logo.png")
 
+    # =========================
     # STYLE
+    # =========================
     st.markdown("""
     <style>
         [data-testid="stSidebarNav"] {display:none;}
@@ -32,16 +34,18 @@ def render_sidebar(datasets, DDR_FILES):
 
     with st.sidebar:
 
+        # =========================
         # LOGO
+        # =========================
         st.markdown(f"""
         <div style="text-align:center; padding:10px 0 20px 0;">
-            <img src="data:image/png;base64,{logo_base64}" width="80">
+            data:image/png;base64,{logo_base64}
         </div>
         """, unsafe_allow_html=True)
 
-        # -------------------------
-        # 🟢 ASSET (DEEP GREEN CARD)
-        # -------------------------
+        # =========================
+        # 🟢 ASSET (GREEN CARD)
+        # =========================
         st.markdown("""
         <div style="
             background-color:#0f2a1f;
@@ -66,9 +70,9 @@ def render_sidebar(datasets, DDR_FILES):
         df = datasets[asset].copy()
         df.columns = df.columns.str.strip().str.lower()
 
-        # -------------------------
+        # =========================
         # FILTERS
-        # -------------------------
+        # =========================
         st.markdown('<div class="section-title">FILTERS</div>', unsafe_allow_html=True)
 
         doc_type = st.selectbox(
@@ -89,22 +93,22 @@ def render_sidebar(datasets, DDR_FILES):
         if status != "All":
             filtered_df = filtered_df[filtered_df["status"] == status]
 
-        # -------------------------
+        # =========================
         # SEQUENCE
-        # -------------------------
+        # =========================
         st.markdown('<div class="section-title">SEQUENCE</div>', unsafe_allow_html=True)
 
         seq_list = sorted(filtered_df["seq no"].dropna().unique().tolist())
 
         if len(seq_list) == 0:
             st.warning("No records found")
-            return asset, filtered_df, None
+            return asset, filtered_df, None, None
 
         seq_choice = st.selectbox("Select Seq No", seq_list)
 
-        # -------------------------
-        # 🔵 DESIGN DECISION REGISTER (DEEP BLUE CARD)
-        # -------------------------
+        # =========================
+        # 🔵 DESIGN DECISION REGISTER (BLUE CARD)
+        # =========================
         st.markdown("""
         <div style="
             background-color:#0e1f3a;
@@ -117,9 +121,16 @@ def render_sidebar(datasets, DDR_FILES):
                 color:#5dade2;
                 font-size:12px;
                 font-weight:600;
-                margin-bottom:8px;
+                margin-bottom:6px;
             ">
                 🔵 DESIGN DECISION REGISTER
+            </div>
+            <div style="
+                color:#aab6cf;
+                font-size:11px;
+                margin-bottom:6px;
+            ">
+                Select:
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -132,4 +143,12 @@ def render_sidebar(datasets, DDR_FILES):
             key="ddr_selector"
         )
 
-        return asset, filtered_df, seq_choice
+        # ✅ Prevent auto-trigger on first load
+        if "ddr_initialized" not in st.session_state:
+            st.session_state.ddr_initialized = True
+            selected_ddr = None
+
+        # =========================
+        # RETURN
+        # =========================
+        return asset, filtered_df, seq_choice, selected_ddr
