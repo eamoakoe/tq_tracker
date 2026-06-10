@@ -17,6 +17,7 @@ def render_sidebar(datasets, DDR_FILES):
     st.markdown("""
     <style>
         [data-testid="stSidebarNav"] {display:none;}
+
         section[data-testid="stSidebar"] {
             background: linear-gradient(180deg, #08111f 0%, #0b1a2f 100%);
         }
@@ -35,9 +36,26 @@ def render_sidebar(datasets, DDR_FILES):
         """, unsafe_allow_html=True)
 
         # =========================
-        # 🟢 ASSET
+        # ASSET (DARK GREEN CARD)
         # =========================
-        st.markdown("### 🟢 ASSET")
+        st.markdown("""
+        <div style="
+            background-color:#0b1f15;
+            padding:14px;
+            border-radius:10px;
+            border:2px solid #1f6f4a;
+            margin-bottom:10px;
+        ">
+            <div style="
+                color:#7ee2a8;
+                font-size:13px;
+                font-weight:600;
+                margin-bottom:8px;
+            ">
+                ASSET
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
         asset = st.radio(
             "",
@@ -80,33 +98,11 @@ def render_sidebar(datasets, DDR_FILES):
 
         if len(seq_list) == 0:
             st.warning("No records found")
-            return asset, filtered_df, None, None
+            return asset, filtered_df, None
 
         seq_choice = st.selectbox("Select Seq No", seq_list)
 
         # =========================
-        # 🔵 DESIGN DECISION REGISTER
-        # =========================
-        st.markdown("---")
-        st.markdown("### 🔵 DESIGN DECISION REGISTER")
-
-        # ✅ THIS IS THE IMPORTANT PART (VISIBLE)
-        st.write("Select:")
-
-        ddr_assets = ["Ferry", "Flass", "Rossall", "ASP4", "TallyHo"]
-
-        selected_ddr = st.radio(
-            "",
-            ddr_assets,
-            key="ddr_selector"
-        )
-
-        # ✅ prevent auto open on first load
-        if "ddr_init" not in st.session_state:
-            st.session_state.ddr_init = True
-            selected_ddr = None
-
-        # =========================
         # RETURN
         # =========================
-        return asset, filtered_df, seq_choice, selected_ddr
+        return asset, filtered_df, seq_choice
