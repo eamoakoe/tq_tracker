@@ -52,7 +52,7 @@ def render_sidebar(datasets):
                 font-weight:600;
                 margin-bottom:8px;
             ">
-                ASSET
+                UU AMP8 DD&B
             </div>
         </div>
         """, unsafe_allow_html=True)
