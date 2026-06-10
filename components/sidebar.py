@@ -40,38 +40,34 @@ def render_sidebar(datasets, DDR_FILES):
         """, unsafe_allow_html=True)
 
         # -------------------------
-        # 🟡 ASSET (GOLD CARD)
+        # 🟢 ASSET (DEEP GREEN CARD)
         # -------------------------
         st.markdown("""
         <div style="
-            background-color:#2a2110;
+            background-color:#0f2a1f;
             padding:12px;
             border-radius:10px;
-            border:1px solid #c9a227;
+            border:1px solid #2ecc71;
             margin-bottom:10px;
         ">
             <div style="
-                color:#ffd700;
+                color:#58d68d;
                 font-size:12px;
                 font-weight:600;
                 margin-bottom:8px;
             ">
-                🟡 ASSET
+                🟢 ASSET
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-        asset = st.radio(
-            "",
-            list(datasets.keys()),
-            key="asset_selector"
-        )
+        asset = st.radio("", list(datasets.keys()), key="asset_selector")
 
         df = datasets[asset].copy()
         df.columns = df.columns.str.strip().str.lower()
 
         # -------------------------
-        # 🔽 FILTERS
+        # FILTERS
         # -------------------------
         st.markdown('<div class="section-title">FILTERS</div>', unsafe_allow_html=True)
 
@@ -94,7 +90,7 @@ def render_sidebar(datasets, DDR_FILES):
             filtered_df = filtered_df[filtered_df["status"] == status]
 
         # -------------------------
-        # 🔽 SEQUENCE
+        # SEQUENCE
         # -------------------------
         st.markdown('<div class="section-title">SEQUENCE</div>', unsafe_allow_html=True)
 
@@ -107,23 +103,23 @@ def render_sidebar(datasets, DDR_FILES):
         seq_choice = st.selectbox("Select Seq No", seq_list)
 
         # -------------------------
-        # 🔴 DESIGN DECISION REGISTER (RED CARD)
+        # 🔵 DESIGN DECISION REGISTER (DEEP BLUE CARD)
         # -------------------------
         st.markdown("""
         <div style="
-            background-color:#2a1115;
+            background-color:#0e1f3a;
             padding:12px;
             border-radius:10px;
-            border:1px solid #ff4d4d;
+            border:1px solid #3498db;
             margin-top:20px;
         ">
             <div style="
-                color:#ff6b6b;
+                color:#5dade2;
                 font-size:12px;
                 font-weight:600;
                 margin-bottom:8px;
             ">
-                🔴 DESIGN DECISION REGISTER
+                🔵 DESIGN DECISION REGISTER
             </div>
         </div>
         """, unsafe_allow_html=True)
