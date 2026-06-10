@@ -10,7 +10,7 @@ def render_outstanding_line(df, total=None):
         return
 
     # =========================
-    # CLEAN DATA (FIXED ✅)
+    # CLEAN DATA
     # =========================
     df = df.copy()
     df.columns = df.columns.str.strip().str.lower()
@@ -22,7 +22,7 @@ def render_outstanding_line(df, total=None):
     df[status_col] = (
         df[status_col]
         .astype(str)
-        .str.replace(u"\xa0", " ", regex=False)  # remove hidden spaces
+        .str.replace(u"\xa0", " ", regex=False)
         .str.strip()
         .str.upper()
     )
@@ -39,14 +39,13 @@ def render_outstanding_line(df, total=None):
     tq = df[df[doc_col] == "TQ"]
 
     # =========================
-    # LOGIC (FIXED ✅)
+    # LOGIC
     # =========================
     def calc(sub):
 
         open_items = sub[sub[status_col] == "OPEN"]
         closed_items = sub[sub[status_col] == "CLOSED"]
 
-        # ✅ robust Responded detection
         responded_items = sub[
             sub[status_col].str.contains("RESPOND", na=False)
         ]
@@ -79,7 +78,7 @@ def render_outstanding_line(df, total=None):
     }
 
     # =========================
-    # PIE CHART (NO ZEROS ✅)
+    # PIE CHART
     # =========================
     def pie(open_count, outstanding, closed, responded):
 
@@ -92,7 +91,6 @@ def render_outstanding_line(df, total=None):
             COLORS["responded"]
         ]
 
-        # ✅ remove zero slices
         filtered = [
             (l, v, c)
             for l, v, c in zip(labels, values, colors)
@@ -129,7 +127,7 @@ def render_outstanding_line(df, total=None):
         return fig
 
     # =========================
-    # CARD
+    # CARD (✅ FIX APPLIED HERE)
     # =========================
     def card(title, open_count, outstanding, closed, responded):
 
@@ -144,7 +142,6 @@ def render_outstanding_line(df, total=None):
             """
         )
 
-        # ✅ FINAL NOTE
         st.markdown("""
         <div style="
             font-size:12px;
@@ -158,9 +155,11 @@ def render_outstanding_line(df, total=None):
         </div>
         """, unsafe_allow_html=True)
 
+        # ✅ FIX: unique key per chart
         st.plotly_chart(
             pie(open_count, outstanding, closed, responded),
-            use_container_width=True
+            use_container_width=True,
+            key=f"{title}_chart"
         )
 
         st.divider()
@@ -176,8 +175,3 @@ def render_outstanding_line(df, total=None):
     with col2:
         card("TQ", tq_open, tq_out, tq_closed, tq_responded)
 
-    # =========================
-    # DEBUG (OPTIONAL ✅)
-    # =========================
-    # Uncomment to inspect real values if needed
-    # st.write("Unique Status Values:", df[status_col].unique())
